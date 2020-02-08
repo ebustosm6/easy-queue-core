@@ -4,7 +4,7 @@ setup(
     name='easyqueue-core',
     version='0.0.0',
     description='Easy queue basic model',
-    url='https://github.com/Bignone/easy-queue.git',
+    url='https://github.com/Bignone/easy-queue-core.git',
     author='Eduardo Bustos',
 
     classifiers=[
@@ -18,7 +18,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
 
-    keywords='rest restful api flask swagger openapi flask-restplus',
+    keywords='rest restful api swagger openapi eq-object',
 
     packages=find_packages(),
 
