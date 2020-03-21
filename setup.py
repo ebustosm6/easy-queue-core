@@ -1,27 +1,29 @@
+import sys
+from os import path
 from setuptools import setup, find_packages
+
+if sys.version_info[:2] < (3, 4):
+    raise RuntimeError("Python version >= 3.4 required.")
 
 setup(
     name='easyqueue-core',
     version='0.0.0',
-    description='Easy queue basic model',
-    url='https://github.com/Bignone/easy-queue-core.git',
     author='Eduardo Bustos',
-
+    url='https://github.com/ebustosm6/easy-queue-core.git',
+    description='Easy queue basic model',
+    long_description=open(path.join(path.dirname(__file__), 'README.md')).read(),
+    namespace_packages='easyqueue',
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 1 - Planning',
         'Intended Audience :: Developers',
-        'Topic :: Software Development :: Libraries :: Application Frameworks',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3',
+        'Topic :: Software Development :: Libraries',
+        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-
-    keywords='rest restful api swagger openapi eq-object',
-
+    keywords='easy queue core',
     packages=find_packages(),
-
     install_requires=[
         'schema'
         ],
