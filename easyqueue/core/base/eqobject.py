@@ -6,12 +6,6 @@ import dateutil.parser
 from schema import Schema, And
 
 
-schema = Schema({
-    '_id': And(str, len),
-    '_created_at': And(str, lambda n: dateutil.parser.parse(n)),
-    '__type__': 'EQObject'}, ignore_extra_keys=True)
-
-
 class EQEncoder(json.JSONEncoder):
 
     def default(self, obj):
@@ -35,6 +29,14 @@ class EQDecoder(json.JSONDecoder):
 
 
 class EQObject:
+
+    SCHEMA = Schema(
+        {
+            '_id': And(str, len),
+            '_created_at': And(str, lambda n: dateutil.parser.parse(n)),
+            '__type__': 'EQObject'
+        },
+        ignore_extra_keys=False)
     
     def __init__(self):
         self._id = uuid.uuid4().hex
@@ -58,7 +60,7 @@ class EQObject:
     
     @staticmethod
     def from_json(obj):
-        return EQDecoder().object_hook(schema.validate(obj))
+        return EQDecoder().object_hook(EQObject.SCHEMA.validate(obj))
         
     def __str__(self):
         return str(self.__dict__)

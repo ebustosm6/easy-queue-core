@@ -12,7 +12,6 @@ setup(
     url='https://github.com/ebustosm6/easy-queue-core.git',
     description='Easy queue basic model',
     long_description=open(path.join(path.dirname(__file__), 'README.md')).read(),
-    namespace_packages='easyqueue',
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Developers',

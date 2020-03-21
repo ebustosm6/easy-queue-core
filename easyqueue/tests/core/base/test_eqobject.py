@@ -10,9 +10,9 @@ class TestEQObject(unittest.TestCase):
     def setUp(self):
         random.seed(5432)
         self.example_eqobject_json = {
-            "_id": "9c482525eaa14c3d808de7d1d1a483ed",
-            "__type__": "EQObject",
-            "_created_at": "2020-02-03T16:57:53.501633"
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '__type__': 'EQObject',
+            '_created_at': '2020-02-03T16:57:53.501633'
         }
 
         self.example_eqobject = EQObject()
