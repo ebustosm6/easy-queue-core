@@ -1,16 +1,16 @@
-from datetime import datetime
-import dateutil.parser
-import time
 import uuid
 import json
-import time
-from schema import Schema, And, Use, Optional
+from datetime import datetime
+import dateutil.parser
+
+from schema import Schema, And
 
 
 schema = Schema({
     '_id': And(str, len),
     '_created_at': And(str, lambda n: dateutil.parser.parse(n)),
     '__type__': 'EQObject'}, ignore_extra_keys=True)
+
 
 class EQEncoder(json.JSONEncoder):
 
@@ -22,7 +22,8 @@ class EQDecoder(json.JSONDecoder):
     def __init__(self, *args, **kwargs):
         json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
 
-    def object_hook(self, obj):
+    @staticmethod
+    def object_hook(obj):
         res = None
         
         if '__type__' in obj and obj['__type__'] == 'EQObject':
@@ -62,9 +63,8 @@ class EQObject:
     def __str__(self):
         return str(self.__dict__)
         
-    def __hash__(self):        
-        raise hash()
-    
+    def __hash__(self):
+        return hash(str(self))
+
     def __eq__(self, other):
-        self.uid == self.uid
-    
+        return self.id == other.id

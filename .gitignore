@@ -59,6 +59,8 @@ instance/
 # dotenv
 .env
 
+# vscode
+.vscode/
 # virtualenv
 venv/
 ENV/
