@@ -38,7 +38,9 @@ class TestMongoRepository(unittest.TestCase):
             '_value': 'EQObject'
         }
 
-        expected_error_msg = 'element not valid: must be dict'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='element', elem_val=str(example_element_json), exp_type=dict,
+                    f_type=type(str(example_element_json)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()
@@ -87,14 +89,19 @@ class TestMongoRepository(unittest.TestCase):
 
     def test_create_many_invalid_elements_type(self):
         example_elements_json = [
-            123123,
+            {
+                '_id': '9c482525eaa14c3d808de7d1d1a483gf',
+                '_value': 'EQObject'
+            },
             {
                 '_id': '9c482525eaa14c3d808de7d1d1a483ju',
                 '_value': 'EQObject'
             }
         ]
 
-        expected_error_msg = 'elements not valid: must be list of dicts'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='elements', elem_val=str(example_elements_json), exp_type=list,
+                    f_type=type(str(example_elements_json)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()
@@ -137,21 +144,42 @@ class TestMongoRepository(unittest.TestCase):
         self.assertIsInstance(result_find, list)
         self.assertEqual(expected_result, result_find)
 
-    def test_findinvalid_query_type(self):
+    def test_find_invalid_query_type(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
 
-        expected_result = [
-            {
-                '_id': '9c482525eaa14c3d808de7d1d1a483ew',
-                '_value': 'EQObject'
-            }
-        ]
-
-        expected_error_msg = 'query not valid: must be dict'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='query', elem_val=str(query), exp_type=dict,
+                    f_type=type(str(query)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()
             _ = loop.run_until_complete(self.repository.find(query=str(query)))
+        self.assertEqual(expected_error_msg, str(exc.exception))
+
+    @unittest.skip('Development test')
+    def test_find_one(self):
+        query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
+
+        expected_result = {
+            '_id': '9c482525eaa14c3d808de7d1d1a483ew',
+            '_value': 'EQObject'
+            }
+
+        loop = asyncio.get_event_loop()
+        result_find = loop.run_until_complete(self.repository.find_one(query=query))
+        self.assertIsInstance(result_find, dict)
+        self.assertEqual(expected_result, result_find)
+
+    def test_find_one_invalid_query_type(self):
+        query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
+
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='query', elem_val=str(query), exp_type=dict,
+                    f_type=type(str(query)))
+
+        with self.assertRaises(TypeError) as exc:
+            loop = asyncio.get_event_loop()
+            _ = loop.run_until_complete(self.repository.find_one(query=str(query)))
         self.assertEqual(expected_error_msg, str(exc.exception))
 
     @unittest.skip('Development test')
@@ -173,7 +201,9 @@ class TestMongoRepository(unittest.TestCase):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
         update = {'$set': {'_value': 'EQObjectModified'}}
 
-        expected_error_msg = 'query must be dict'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='query', elem_val=str(query), exp_type=dict,
+                    f_type=type(str(query)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()
@@ -185,7 +215,9 @@ class TestMongoRepository(unittest.TestCase):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
         update = {'$set': {'_value': 'EQObjectModified'}}
 
-        expected_error_msg = 'update must be dict'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='update', elem_val=str(update), exp_type=dict,
+                    f_type=type(str(update)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()
@@ -212,7 +244,9 @@ class TestMongoRepository(unittest.TestCase):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
         update = {'$set': {'_value': 'EQObjectModified'}}
 
-        expected_error_msg = 'query must be dict'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='query', elem_val=str(query), exp_type=dict,
+                    f_type=type(str(query)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()
@@ -224,7 +258,9 @@ class TestMongoRepository(unittest.TestCase):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
         update = {'$set': {'_value': 'EQObjectModified'}}
 
-        expected_error_msg = 'update must be dict'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='update', elem_val=str(update), exp_type=dict,
+                    f_type=type(str(update)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()
@@ -260,11 +296,12 @@ class TestMongoRepository(unittest.TestCase):
         self.assertIsInstance(result_find, dict)
         self.assertEqual(expected_result, result_find)
 
-    @unittest.skip('Development test')
-    def test_update_one_invalid_query_type(self):
+    def test_delete_one_invalid_query_type(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
 
-        expected_error_msg = 'query must be dict'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='query', elem_val=str(query), exp_type=dict,
+                    f_type=type(str(query)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()
@@ -273,7 +310,7 @@ class TestMongoRepository(unittest.TestCase):
         self.assertEqual(expected_error_msg, str(exc.exception))
 
     @unittest.skip('Development test')
-    def test_update_one_more_than_one_document_found(self):
+    def test_delete_one_more_than_one_document_found(self):
         query = {'_value': 'EQObjectModified'}
 
         expected_error_msg = 'Found more than one document: 2'
@@ -301,7 +338,9 @@ class TestMongoRepository(unittest.TestCase):
     def test_delete_many_invalid_query_type(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
 
-        expected_error_msg = 'query must be dict'
+        expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
+            .format(elem_name='query', elem_val=str(query), exp_type=dict,
+                    f_type=type(str(query)))
 
         with self.assertRaises(TypeError) as exc:
             loop = asyncio.get_event_loop()

@@ -39,7 +39,7 @@ class EQObject:
         ignore_extra_keys=False)
     
     def __init__(self):
-        self._id = uuid.uuid4().hex
+        self._id = uuid.uuid1().hex
         self._created_at = datetime.utcnow().isoformat()
         self.__type__ = self.__class__.__name__
         
