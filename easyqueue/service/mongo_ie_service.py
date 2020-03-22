@@ -16,7 +16,8 @@ class MongoIEService(BaseIEService):
         self.base_object_class = base_object_class if base_object_class is not None else self.base_object_class
 
     async def count(self, query: Dict) -> Dict:
-        TypeValidator.raise_validation_element_type(element_name='query', element=query, type_class=dict, allow_none=False)
+        TypeValidator.raise_validation_element_type(
+            element_name='query', element=query, type_class=dict, allow_none=False)
         return await self.repository.count(query=query)
 
     async def import_one(self, element: Dict) -> Dict:
@@ -34,4 +35,3 @@ class MongoIEService(BaseIEService):
 
     async def export_many(self) -> List[Dict]:
         return await self.repository.find(query={})
-

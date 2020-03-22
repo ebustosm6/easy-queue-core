@@ -14,8 +14,8 @@ class BaseIEService:
     async def import_many(self, elements: List[EQObject]) -> Dict:
         raise NotImplementedError()
 
-    async def export_one(self, query: object, update: object) -> Dict:
+    async def export_one(self, query: object) -> Dict:
         raise NotImplementedError()
 
-    async def export_many(self, query: object, update: object) -> List[Dict]:
+    async def export_many(self) -> List[Dict]:
         raise NotImplementedError()
