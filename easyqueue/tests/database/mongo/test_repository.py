@@ -1,8 +1,9 @@
 import unittest
 import asyncio
 
+from easyqueue.core.response import ResponseDTO, ResponseCode
 from schema import SchemaMissingKeyError, Schema, And
-from easyqueue.database.mongo import MongoRepository
+from easyqueue.database.mongo.repository import MongoRepository
 
 
 class TestMongoRepository(unittest.TestCase):
@@ -19,17 +20,17 @@ class TestMongoRepository(unittest.TestCase):
             uri='mongodb://localhost:27017/', database='test', collection='test', validation_schema=schema)
 
     @unittest.skip('Development test')
-    def test_create_one(self):
+    def test_create_one(self, _):
         example_element_json = {
-            '_id': '9c482525eaa14c3d808de7d1d1a483ew',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ep',
             '_value': 'EQObject'
         }
 
-        expected_result = {'acknowledged': True, 'inserted_id': '9c482525eaa14c3d808de7d1d1a483ew'}
-
+        expected_result = ResponseDTO(code=ResponseCode.OK,
+                                      data={'acknowledged': True, 'inserted_id': '9c482525eaa14c3d808de7d1d1a483ep'})
         loop = asyncio.get_event_loop()
         result_create = loop.run_until_complete(self.repository.create_one(element=example_element_json))
-        self.assertIsInstance(result_create, dict)
+        self.assertIsInstance(result_create, ResponseDTO)
         self.assertEqual(expected_result, result_create)
 
     def test_create_one_invalid_element_type(self):
@@ -65,26 +66,22 @@ class TestMongoRepository(unittest.TestCase):
     def test_create_many(self):
         example_elements_json = [
             {
-                '_id': '9c482525eaa14c3d808de7d1d1a483ep',
+                '_id': '9k482525eaa14c3d808de7d1d1a483ep',
                 '_value': 'EQObject'
             },
             {
-                '_id': '9c482525eaa14c3d808de7d1d1a483eu',
+                '_id': '9k482525eaa14c3d808de7d1d1a483eu',
                 '_value': 'EQObject'
             }
         ]
 
-        expected_result = {
-            'acknowledged': True,
-            'inserted_ids': [
-                '9c482525eaa14c3d808de7d1d1a483ep',
-                '9c482525eaa14c3d808de7d1d1a483eu'
-            ]
-        }
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'inserted_ids': [
+                                                                    '9k482525eaa14c3d808de7d1d1a483ep',
+                                                                    '9k482525eaa14c3d808de7d1d1a483eu']})
 
         loop = asyncio.get_event_loop()
         result_create = loop.run_until_complete(self.repository.create_many(elements=example_elements_json))
-        self.assertIsInstance(result_create, dict)
+        self.assertIsInstance(result_create, ResponseDTO)
         self.assertEqual(expected_result, result_create)
 
     def test_create_many_invalid_elements_type(self):
@@ -120,9 +117,9 @@ class TestMongoRepository(unittest.TestCase):
             }
         ]
 
-        expected_error_msg = 'Missing key: \'_id\''
+        expected_error_msg = '{\'_id\': \'9c482525eaa14c3d808de7d1d1a483gf\', \'_value\': \'EQObject\'}'
 
-        with self.assertRaises(SchemaMissingKeyError) as exc:
+        with self.assertRaises(ValueError) as exc:
             loop = asyncio.get_event_loop()
             _ = loop.run_until_complete(self.repository.create_many(elements=example_elements_json, validate=True))
 
@@ -132,16 +129,17 @@ class TestMongoRepository(unittest.TestCase):
     def test_find(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
 
-        expected_result = [
-            {
-                '_id': '9c482525eaa14c3d808de7d1d1a483ew',
-                '_value': 'EQObject'
-            }
-        ]
+        expected_result = ResponseDTO(code=ResponseCode.OK, data=[
+                                        {
+                                            '_id': '9c482525eaa14c3d808de7d1d1a483ew',
+                                            '_value': 'EQObject'
+                                        }
+                                    ])
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.repository.find(query=query))
-        self.assertIsInstance(result_find, list)
+        self.assertIsInstance(result_find, ResponseDTO)
+        self.assertIsInstance(result_find.data, list)
         self.assertEqual(expected_result, result_find)
 
     def test_find_invalid_query_type(self):
@@ -160,14 +158,14 @@ class TestMongoRepository(unittest.TestCase):
     def test_find_one(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
 
-        expected_result = {
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={
             '_id': '9c482525eaa14c3d808de7d1d1a483ew',
             '_value': 'EQObject'
-            }
+            })
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.repository.find_one(query=query))
-        self.assertIsInstance(result_find, dict)
+        self.assertIsInstance(result_find, ResponseDTO)
         self.assertEqual(expected_result, result_find)
 
     def test_find_one_invalid_query_type(self):
@@ -187,14 +185,11 @@ class TestMongoRepository(unittest.TestCase):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
         update = {'$set': {'_value': 'EQObjectModified'}}
 
-        expected_result = {
-            'acknowledged': True,
-            'modified_count': 1
-        }
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'modified_count': 1})
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.repository.update_one(query=query, update=update))
-        self.assertIsInstance(result_find, dict)
+        self.assertIsInstance(result_find, ResponseDTO)
         self.assertEqual(expected_result, result_find)
 
     def test_update_one_invalid_query_type(self):
@@ -230,15 +225,13 @@ class TestMongoRepository(unittest.TestCase):
         query = {'_value': 'EQObject'}
         update = {'$set': {'_value': 'EQObjectModified'}}
 
-        expected_result = {
-            'acknowledged': True,
-            'modified_count': 2
-        }
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'modified_count': 2})
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.repository.update_many(query=query, update=update))
-        self.assertIsInstance(result_find, dict)
-        self.assertEqual(expected_result, result_find)
+        self.assertIsInstance(result_find, ResponseDTO)
+        self.assertEqual(expected_result.code, result_find.code)
+        self.assertEqual(expected_result.data, result_find.data)
 
     def test_update_many_invalid_query_type(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
@@ -272,29 +265,23 @@ class TestMongoRepository(unittest.TestCase):
     def test_delete_one(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
 
-        expected_result = {
-            'acknowledged': True,
-            'deleted_count': 1
-        }
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'deleted_count': 1})
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.repository.delete_one(query=query))
-        self.assertIsInstance(result_find, dict)
+        self.assertIsInstance(result_find, ResponseDTO)
         self.assertEqual(expected_result, result_find)
 
     @unittest.skip('Development test')
     def test_delete_one_no_documents(self):
         query = {'_id': 'none_id'}
 
-        expected_result = {
-            'acknowledged': True,
-            'deleted_count': 0
-        }
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'deleted_count': 0})
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.repository.delete_one(query=query))
-        self.assertIsInstance(result_find, dict)
-        self.assertEqual(expected_result, result_find)
+        self.assertIsInstance(result_find, ResponseDTO)
+        self.assertEqual(expected_result.data, result_find.data)
 
     def test_delete_one_invalid_query_type(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}
@@ -325,15 +312,12 @@ class TestMongoRepository(unittest.TestCase):
     def test_delete_many(self):
         query = {'_value': 'EQObjectModified'}
 
-        expected_result = {
-            'acknowledged': True,
-            'deleted_count': 2
-        }
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'deleted_count': 2})
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.repository.delete_many(query=query))
-        self.assertIsInstance(result_find, dict)
-        self.assertEqual(expected_result, result_find)
+        self.assertIsInstance(result_find, ResponseDTO)
+        self.assertEqual(expected_result.data, result_find.data)
 
     def test_delete_many_invalid_query_type(self):
         query = {'_id': '9c482525eaa14c3d808de7d1d1a483ew'}

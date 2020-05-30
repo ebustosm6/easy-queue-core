@@ -2,8 +2,10 @@ import unittest
 import asyncio
 
 from schema import Schema, And
-from easyqueue.core.base import EQObject
-from easyqueue.database.mongo import MongoRepository
+
+from easyqueue.core.response import ResponseDTO, ResponseCode
+from easyqueue.core.objects.base.eqobject import EQObject
+from easyqueue.database.mongo.repository import MongoRepository
 from easyqueue.service.mongo_crud_service import MongoCRUDService
 
 
@@ -24,12 +26,12 @@ class TestMongoCRUDService(unittest.TestCase):
     def test_create_one(self):
         example_element = EQObject()
 
-        expected_result = {'acknowledged': True, 'inserted_id': example_element.id}
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'inserted_id': example_element.id})
 
         loop = asyncio.get_event_loop()
         result_create = loop.run_until_complete(self.service.create_one(element=example_element))
-        self.assertIsInstance(result_create, dict)
-        self.assertEqual(expected_result, result_create)
+        self.assertIsInstance(result_create, ResponseDTO)
+        self.assertEqual(expected_result.data, result_create.data)
 
     def test_create_one_invalid_element(self):
         expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
@@ -50,22 +52,22 @@ class TestMongoCRUDService(unittest.TestCase):
             example_element_one, example_element_two
         ]
 
-        expected_result = {
-            'acknowledged': True,
-            'inserted_ids': [
-                example_element_one.id,
-                example_element_two.id
-            ]
-        }
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={
+                                        'acknowledged': True,
+                                        'inserted_ids': [
+                                            example_element_one.id,
+                                            example_element_two.id
+                                        ]
+                                    })
 
         loop = asyncio.get_event_loop()
         result_create = loop.run_until_complete(self.service.create_many(elements=example_elements_json))
-        self.assertIsInstance(result_create, dict)
-        self.assertEqual(expected_result, result_create)
+        self.assertIsInstance(result_create, ResponseDTO)
+        self.assertEqual(expected_result.data, result_create.data)
 
     def test_create_many_invalid_elements_type(self):
         example_elements_json = [
-            EQObject(), EQObject()
+            EQObject(identificator='identificator1'), EQObject(identificator='identificator2')
         ]
 
         expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
@@ -79,9 +81,9 @@ class TestMongoCRUDService(unittest.TestCase):
         self.assertEqual(expected_error_msg, str(exc.exception))
 
     def test_create_many_invalid_elements_value(self):
-        invalid_element = str(EQObject())
+        invalid_element = str(EQObject(identificator='identificator'))
         example_elements_json = [
-            invalid_element, EQObject()
+            invalid_element, EQObject(identificator='identificator')
         ]
 
         expected_error_msg = 'Invalid type for {elem_name} with value {elem_val}, expected {exp_type}, found {f_type}' \
@@ -99,31 +101,29 @@ class TestMongoCRUDService(unittest.TestCase):
         example_element = EQObject()
         query = {'_id': example_element.id}
 
-        expected_result = [
-            example_element
-        ]
+        expected_result = ResponseDTO(code=ResponseCode.OK, data=[example_element])
 
         loop = asyncio.get_event_loop()
         _ = loop.run_until_complete(self.service.create_one(element=example_element))
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.service.find(query=query))
-        self.assertIsInstance(result_find, list)
-        self.assertEqual(expected_result, result_find)
+        self.assertIsInstance(result_find, ResponseDTO)
+        self.assertEqual(expected_result.data, result_find.data)
 
     @unittest.skip('Development test')
     def test_find_one(self):
         example_element = EQObject()
         query = {'_id': example_element.id}
 
-        expected_result = example_element
+        expected_result = ResponseDTO(code=ResponseCode.OK, data=example_element)
 
         loop = asyncio.get_event_loop()
         _ = loop.run_until_complete(self.service.create_one(element=example_element))
 
         loop = asyncio.get_event_loop()
         result_find = loop.run_until_complete(self.service.find_one(query=query))
-        self.assertIsInstance(result_find, EQObject)
-        self.assertEqual(expected_result, result_find)
+        self.assertIsInstance(result_find, ResponseDTO)
+        self.assertEqual(expected_result.data, result_find.data)
 
 # TODO: Complete remaining tests

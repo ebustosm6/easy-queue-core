@@ -24,6 +24,7 @@ setup(
     keywords='easy queue core',
     packages=find_packages(),
     install_requires=[
-        'schema'
+        'schema',
+        'marshmallow'
         ],
 )
