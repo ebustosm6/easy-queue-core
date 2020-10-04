@@ -6,28 +6,20 @@ class Ticket(EQObject):
 
     TICKET = 'ticket'
 
-    __schema = TicketSchema()
-    __args = {'user_id', 'user_identificator', 'region', 'queue_id', 'queue_identificator'}
-    __hash_args = {'user_id', 'queue_id'}
+    _schema = TicketSchema()
+    _args = {'user_id', 'user_identificator', 'region', 'queue_id', 'queue_identificator'}
+    _hash_args = {'user_id', 'queue_id'}
 
     def __generate_identificator(self, region, user_identificator, queue_identificator):
         return '{ticket}_{region}_{user}_{queue}'.format(
             ticket=self.TICKET, region=region, user=user_identificator, queue=queue_identificator)
 
-    def __init__(self,  user_id, user_identificator, queue_region, queue_id, queue_identificator, is_active=True):
+    def __init__(self,  user_id, user_identificator, region, queue_id, queue_identificator, is_active=True):
         self.user_id = user_id
         self.user_identificator = user_identificator
-        self.region = queue_region
+        self.region = region
         self.queue_id = queue_id
         self.queue_identificator = queue_identificator
         self.is_active = is_active
         super().__init__(identificator=self.__generate_identificator(
-            region=queue_region, user_identificator=user_identificator, queue_identificator=queue_identificator))
-
-    @classmethod
-    def get_schema(cls):
-        return cls.__schema
-
-    @classmethod
-    def get_args(cls):
-        return cls.__args
+            region=region, user_identificator=user_identificator, queue_identificator=queue_identificator))

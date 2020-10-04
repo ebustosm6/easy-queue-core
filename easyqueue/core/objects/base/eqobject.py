@@ -7,9 +7,9 @@ from easyqueue.core.objects.base.schema import EQObjectSchema
 
 class EQObject:
 
-    __schema = EQObjectSchema()
-    __args = {'identificator'}
-    __hash_args = {'identificator'}
+    _schema = EQObjectSchema()
+    _args = {'identificator'}
+    _hash_args = {'identificator'}
 
     def __init__(self, identificator):
         self.identificator = identificator
@@ -30,24 +30,16 @@ class EQObject:
         )
 
     def validate(self):
-        validation_errors = self.get_schema().validate(self.json())
+        validation_errors = self._schema.validate(self.json())
         if validation_errors:
             raise ValueError(str(validation_errors))
         if self.id != self._generate_id():
             raise ValueError(str({'id': ['Invalid generated id']}))
 
     def _generate_id(self):
-        hash_args = {self.__getattribute__(arg_name) for arg_name in self.__hash_args}
-        hash_key = '{cls}({args})'.format(cls=self.__class__.__name__, args=','.join(hash_args))
+        hash_args = {self.__getattribute__(arg_name) for arg_name in self._hash_args}
+        hash_key = '{cls}({args})'.format(cls=self.__class__.__name__, args=','.join(sorted(hash_args)))
         return uuid.uuid3(namespace=uuid.NAMESPACE_DNS, name=hash_key).hex
-
-    @classmethod
-    def get_schema(cls):
-        return cls.__schema
-
-    @classmethod
-    def get_args(cls):
-        return cls.__args
 
     def json(self, as_string=False):
         obj_json = self.__dict__
@@ -61,18 +53,22 @@ class EQObject:
         return_object = None
         input_init_args = {}
 
-        if obj:
+        if (isinstance(obj, dict) or (isinstance(obj, str) and as_string)) and obj:
             obj_json = json.loads(obj) if as_string else obj
-            validation_errors = cls.get_schema().validate(obj_json)
+            validation_errors = cls._schema.validate(obj_json)
             if not validation_errors:
-                init_args = __class__.get_args()
+                init_args = cls._args
                 for key, value in obj.items():
                     if key in init_args:
                         input_init_args[key] = value
-                return_object = __class__(**input_init_args)
+                return_object = cls(**input_init_args)
                 return_object.__dict__ = obj_json
                 return return_object
             else:
                 raise ValueError(validation_errors)
+        else:
+            TypeError(
+                'Invalid object type "{o_type}", must be no empty "dict" or "str" (if as_string=True)'.format(
+                    o_type=type(obj)))
 
         return return_object

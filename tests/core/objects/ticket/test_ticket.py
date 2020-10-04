@@ -5,7 +5,7 @@ import random
 from easyqueue.core.objects.ticket.ticket import Ticket
 
 
-class TestQueue(unittest.TestCase):
+class TestTicket(unittest.TestCase):
 
     def setUp(self):
         random.seed(5432)
@@ -17,7 +17,7 @@ class TestQueue(unittest.TestCase):
         queue_id = 'queue_id'
         queue_identificator = 'queue_identificator'
         is_active = True
-        expected_id = '1ed734cd442f323c86c4dfd7017247a6'
+        expected_id = '891e731c0a733f9fb10ec8c575c4f199'
         expected_identificator = 'ticket_region_user_identificator_queue_identificator'
         expected_user_id = 'user_id'
         expected_user_identificator = 'user_identificator'
@@ -28,7 +28,7 @@ class TestQueue(unittest.TestCase):
 
         time_before_creation = datetime.utcnow().timestamp()
         res = Ticket(
-            user_id=user_id, user_identificator=user_identificator, queue_region=region,
+            user_id=user_id, user_identificator=user_identificator, region=region,
             queue_id=queue_id, queue_identificator=queue_identificator, is_active=is_active)
         time_after_creation = datetime.utcnow().timestamp()
 
@@ -51,7 +51,7 @@ class TestQueue(unittest.TestCase):
                         '\'user_identificator\': [\'Invalid empty field\']}'
 
         with self.assertRaises(Exception) as exp:
-            Ticket(user_id='', user_identificator='', queue_region='', queue_id='', queue_identificator='')
+            Ticket(user_id='', user_identificator='', region='', queue_id='', queue_identificator='')
         self.assertEqual(str(exp.exception), expected_msg)
 
     def test_json_ok(self):
@@ -62,7 +62,7 @@ class TestQueue(unittest.TestCase):
         queue_identificator = 'queue_identificator'
         is_active = True
         expected_res = {
-            'id': '1ed734cd442f323c86c4dfd7017247a6',
+            'id': '891e731c0a733f9fb10ec8c575c4f199',
             'identificator': 'ticket_region_user_identificator_queue_identificator',
             'created_at': datetime.utcnow().timestamp(),
             'region': 'region',
@@ -74,7 +74,7 @@ class TestQueue(unittest.TestCase):
         }
 
         res = Ticket(
-            user_id=user_id, user_identificator=user_identificator, queue_region=region,
+            user_id=user_id, user_identificator=user_identificator, region=region,
             queue_id=queue_id, queue_identificator=queue_identificator, is_active=is_active).json()
 
         self.assertAlmostEqual(res['created_at'], expected_res['created_at'])
@@ -122,7 +122,7 @@ class TestQueue(unittest.TestCase):
     def test_validate_ok(self):
         res = Ticket(
             user_id='user_id', user_identificator='user_identificator',
-            queue_region='region', queue_id='queue_id', queue_identificator='queue_identificator'
+            region='region', queue_id='queue_id', queue_identificator='queue_identificator'
         )
         self.assertIsNone(res.validate())
 
@@ -131,9 +131,9 @@ class TestQueue(unittest.TestCase):
 
         res = Ticket(
             user_id='user_id', user_identificator='user_identificator',
-            queue_region='region', queue_id='queue_id', queue_identificator='queue_identificator'
+            region='region', queue_id='queue_id', queue_identificator='queue_identificator'
         )
-        res.identificator = 'other'
+        res.user_id = 'other'
         with self.assertRaises(ValueError) as exp:
             res.validate()
         self.assertEqual(str(exp.exception), expected_msg)

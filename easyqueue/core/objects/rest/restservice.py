@@ -4,9 +4,9 @@ from easyqueue.core.objects.base.eqobject import EQObject
 
 class RestService(EQObject):
 
-    __schema = RestServiceSchema()
-    __args = {'identificator', 'host'}
-    __hash_args = {'host', 'context_path'}
+    _schema = RestServiceSchema()
+    _args = {'identificator', 'host'}
+    _hash_args = {'identificator', 'host', 'context_path'}
 
     def __init__(self, identificator, host, port=None, context_path='/'):
         self.host = str(host)
@@ -21,11 +21,3 @@ class RestService(EQObject):
     @property
     def uri(self):
         return '{hp}{cp}'.format(hp=self.hostport, cp=self.context_path)
-
-    @classmethod
-    def get_schema(cls):
-        return cls.__schema
-
-    @classmethod
-    def get_args(cls):
-        return cls.__args

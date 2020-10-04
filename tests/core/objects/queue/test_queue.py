@@ -20,7 +20,7 @@ class TestQueue(unittest.TestCase):
         limit = 0
         is_active = True
         image = 'image'
-        expected_id = '94a290623fe33e36adc13a0aac7f2974'
+        expected_id = '5dd10a7b7455321c9ff97c50e45a9b4a'
         expected_identificator = 'identificator'
         expected_user_id = 'user_id'
         expected_region = 'region'
@@ -69,7 +69,7 @@ class TestQueue(unittest.TestCase):
         is_active = True
         image = 'image'
         expected_res = {
-            'id': '94a290623fe33e36adc13a0aac7f2974',
+            'id': '5dd10a7b7455321c9ff97c50e45a9b4a',
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
             'region': 'region',

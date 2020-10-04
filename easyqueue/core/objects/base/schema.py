@@ -10,7 +10,7 @@ class EQObjectSchema(Schema):
     PUNCTUATION_CHARACTERS = {'_', '-'}
     VALID_CHARACTERS = set(string.ascii_lowercase).union(string.digits).union(PUNCTUATION_CHARACTERS)
 
-    id = fields.Str(required=True)
+    id = fields.Str(required=False)
     identificator = fields.Str(required=True)
     created_at = fields.Integer(required=True)
 

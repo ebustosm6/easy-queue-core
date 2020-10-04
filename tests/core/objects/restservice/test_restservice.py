@@ -15,7 +15,7 @@ class TestRestService(unittest.TestCase):
         host = 'host'
         port = 15000
         context_path = '/context'
-        expected_id = 'fca96dc1917b3ed4b80b796dda834187'
+        expected_id = '541028a93b1c3607b67cdf7394af4e67'
         expected_identificator = 'identificator'
         expected_host = 'host'
         expected_port = 15000
@@ -51,7 +51,7 @@ class TestRestService(unittest.TestCase):
         expected_res = {
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
-            'id': 'fca96dc1917b3ed4b80b796dda834187',
+            'id': '541028a93b1c3607b67cdf7394af4e67',
             'host': 'host',
             'port': 15000,
             'context_path': '/context'
@@ -70,7 +70,7 @@ class TestRestService(unittest.TestCase):
         data = {
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
-            'id': 'fca96dc1917b3ed4b80b796dda834187',
+            'id': ' 541028a93b1c3607b67cdf7394af4e67',
             'host': 'host',
             'port': 15000,
             'context_path': '/context'
