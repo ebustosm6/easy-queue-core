@@ -20,7 +20,7 @@ class TestEQObject(unittest.TestCase):
         time_after_creation = datetime.utcnow().timestamp()
 
         self.assertEqual(res.identificator, expected_identificator)
-        self.assertEqual(res.id, expected_id)
+        self.assertEqual(res._id, expected_id)
         self.assertTrue(time_before_creation <= res.created_at <= time_after_creation)
 
     def test_init_ko(self):
@@ -35,20 +35,20 @@ class TestEQObject(unittest.TestCase):
         expected_res = {
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
-            'id': 'a9a6452334e33ced8e5edb70a01a773e',
+            '_id': 'a9a6452334e33ced8e5edb70a01a773e',
         }
 
         res = EQObject(identificator=identificator).json()
 
         self.assertAlmostEqual(res['created_at'], expected_res['created_at'])
         self.assertEqual(res['identificator'], expected_res['identificator'])
-        self.assertEqual(res['id'], expected_res['id'])
+        self.assertEqual(res['_id'], expected_res['_id'])
 
     def test_from_json_ok(self):
         data = {
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
-            'id': '5eff1410425d349daf4a744a881f79fa',
+            '_id': '5eff1410425d349daf4a744a881f79fa',
         }
 
         res = EQObject.from_json(obj=data)
@@ -57,7 +57,7 @@ class TestEQObject(unittest.TestCase):
     def test_from_json_ko(self):
         data = {
             'created_at': datetime.utcnow().timestamp(),
-            'id': '5eff1410425d349daf4a744a881f79fa',
+            '_id': '5eff1410425d349daf4a744a881f79fa',
         }
         expected_msg = '{\'identificator\': [\'Missing data for required field.\']}'
 
@@ -70,7 +70,7 @@ class TestEQObject(unittest.TestCase):
         self.assertIsNone(res.validate())
 
     def test_validate_ko(self):
-        expected_msg = '{\'id\': [\'Invalid generated id\']}'
+        expected_msg = '{\'_id\': [\'Invalid generated id\']}'
 
         res = EQObject(identificator='identificator')
         res.identificator = 'other'

@@ -39,7 +39,7 @@ class TestQueue(unittest.TestCase):
         time_after_creation = datetime.utcnow().timestamp()
 
         self.assertEqual(res.identificator, expected_identificator)
-        self.assertEqual(res.id, expected_id)
+        self.assertEqual(res._id, expected_id)
         self.assertTrue(time_before_creation <= res.created_at <= time_after_creation)
         self.assertEqual(res.user_id, expected_user_id)
         self.assertEqual(res.region, expected_region)
@@ -69,7 +69,7 @@ class TestQueue(unittest.TestCase):
         is_active = True
         image = 'image'
         expected_res = {
-            'id': '5dd10a7b7455321c9ff97c50e45a9b4a',
+            '_id': '5dd10a7b7455321c9ff97c50e45a9b4a',
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
             'region': 'region',
@@ -87,7 +87,7 @@ class TestQueue(unittest.TestCase):
 
         self.assertAlmostEqual(res['created_at'], expected_res['created_at'])
         self.assertEqual(res['identificator'], expected_res['identificator'])
-        self.assertEqual(res['id'], expected_res['id'])
+        self.assertEqual(res['_id'], expected_res['_id'])
         self.assertEqual(res['region'], expected_res['region'])
         self.assertEqual(res['user_id'], expected_res['user_id'])
         self.assertEqual(res['group'], expected_res['group'])
@@ -99,7 +99,7 @@ class TestQueue(unittest.TestCase):
 
     def test_from_json_ok(self):
         data = {
-            'id': '94a290623fe33e36adc13a0aac7f2974',
+            '_id': '94a290623fe33e36adc13a0aac7f2974',
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
             'region': 'region',
@@ -117,7 +117,7 @@ class TestQueue(unittest.TestCase):
 
     def test_from_json_ko(self):
         data = {
-            'id': '94a290623fe33e36adc13a0aac7f2974',
+            '_id': '94a290623fe33e36adc13a0aac7f2974',
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
             'user_id': 'user_id',
@@ -139,7 +139,7 @@ class TestQueue(unittest.TestCase):
         self.assertIsNone(res.validate())
 
     def test_validate_ko(self):
-        expected_msg = '{\'id\': [\'Invalid generated id\']}'
+        expected_msg = '{\'_id\': [\'Invalid generated id\']}'
 
         res = Queue(identificator='identificator', region='region', user_id='user_id')
         res.identificator = 'other'

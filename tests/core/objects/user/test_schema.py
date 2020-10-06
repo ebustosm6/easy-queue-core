@@ -11,7 +11,7 @@ class TestUserSchema(unittest.TestCase):
 
     def test_validate_ok(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'email': 'email@server.dom',
@@ -28,7 +28,7 @@ class TestUserSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_region(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'email': 'email@server.dom',
@@ -45,7 +45,7 @@ class TestUserSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_email(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'email': 'invalid_email',
@@ -62,7 +62,7 @@ class TestUserSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_password(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'email': 'email@server.dom',

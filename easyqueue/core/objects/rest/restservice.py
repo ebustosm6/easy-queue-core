@@ -4,9 +4,13 @@ from easyqueue.core.objects.base.eqobject import EQObject
 
 class RestService(EQObject):
 
+    HOST = 'host'
+    CONTEXT_PATH = 'context_path'
+    PORT = 'port'
+
     _schema = RestServiceSchema()
-    _args = {'identificator', 'host'}
-    _hash_args = {'identificator', 'host', 'context_path'}
+    _args = {EQObject.IDENTIFICATOR, HOST}
+    _hash_args = {EQObject.IDENTIFICATOR, HOST, CONTEXT_PATH}
 
     def __init__(self, identificator, host, port=None, context_path='/'):
         self.host = str(host)

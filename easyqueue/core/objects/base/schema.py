@@ -10,7 +10,7 @@ class EQObjectSchema(Schema):
     PUNCTUATION_CHARACTERS = {'_', '-'}
     VALID_CHARACTERS = set(string.ascii_lowercase).union(string.digits).union(PUNCTUATION_CHARACTERS)
 
-    id = fields.Str(required=False)
+    _id = fields.Str(required=False)
     identificator = fields.Str(required=True)
     created_at = fields.Integer(required=True)
 
@@ -31,7 +31,7 @@ class EQObjectSchema(Schema):
         if not data:
             raise ValidationError('Invalid empty field')
 
-    @validates('id')
+    @validates('_id')
     def validate_id(self, data: str):
         self.validate_non_empty(data=data)
 

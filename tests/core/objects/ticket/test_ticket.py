@@ -33,7 +33,7 @@ class TestTicket(unittest.TestCase):
         time_after_creation = datetime.utcnow().timestamp()
 
         self.assertEqual(res.identificator, expected_identificator)
-        self.assertEqual(res.id, expected_id)
+        self.assertEqual(res._id, expected_id)
         self.assertTrue(time_before_creation <= res.created_at <= time_after_creation)
         self.assertEqual(res.user_id, expected_user_id)
         self.assertEqual(res.user_identificator, expected_user_identificator)
@@ -62,7 +62,7 @@ class TestTicket(unittest.TestCase):
         queue_identificator = 'queue_identificator'
         is_active = True
         expected_res = {
-            'id': '891e731c0a733f9fb10ec8c575c4f199',
+            '_id': '891e731c0a733f9fb10ec8c575c4f199',
             'identificator': 'ticket_region_user_identificator_queue_identificator',
             'created_at': datetime.utcnow().timestamp(),
             'region': 'region',
@@ -79,7 +79,7 @@ class TestTicket(unittest.TestCase):
 
         self.assertAlmostEqual(res['created_at'], expected_res['created_at'])
         self.assertEqual(res['identificator'], expected_res['identificator'])
-        self.assertEqual(res['id'], expected_res['id'])
+        self.assertEqual(res['_id'], expected_res['_id'])
         self.assertEqual(res['user_id'], expected_res['user_id'])
         self.assertEqual(res['user_identificator'], expected_res['user_identificator'])
         self.assertEqual(res['region'], expected_res['region'])
@@ -88,7 +88,7 @@ class TestTicket(unittest.TestCase):
 
     def test_from_json_ok(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
@@ -104,7 +104,7 @@ class TestTicket(unittest.TestCase):
 
     def test_from_json_ko(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'user_id': 'user_id',
@@ -127,7 +127,7 @@ class TestTicket(unittest.TestCase):
         self.assertIsNone(res.validate())
 
     def test_validate_ko(self):
-        expected_msg = '{\'id\': [\'Invalid generated id\']}'
+        expected_msg = '{\'_id\': [\'Invalid generated id\']}'
 
         res = Ticket(
             user_id='user_id', user_identificator='user_identificator',

@@ -11,7 +11,7 @@ class TestEQObjectSchema(unittest.TestCase):
 
     def test_validate_ok(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000
         }
@@ -23,11 +23,11 @@ class TestEQObjectSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_id(self):
         data = {
-            'id': '',
+            '_id': '',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
         }
-        expected_res = {'id': ['Invalid empty field']}
+        expected_res = {'_id': ['Invalid empty field']}
 
         validator = EQObjectSchema()
         res = validator.validate(data=data)
@@ -35,7 +35,7 @@ class TestEQObjectSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_identificator(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': '',
             'created_at': 1590000000.000000,
         }
@@ -47,7 +47,7 @@ class TestEQObjectSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_created_at(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 150000.000000,
         }

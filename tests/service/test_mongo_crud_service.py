@@ -26,7 +26,7 @@ class TestMongoCRUDService(unittest.TestCase):
     def test_create_one(self):
         example_element = EQObject()
 
-        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'inserted_id': example_element.id})
+        expected_result = ResponseDTO(code=ResponseCode.OK, data={'acknowledged': True, 'inserted_id': example_element._id})
 
         loop = asyncio.get_event_loop()
         result_create = loop.run_until_complete(self.service.create_one(element=example_element))
@@ -55,8 +55,8 @@ class TestMongoCRUDService(unittest.TestCase):
         expected_result = ResponseDTO(code=ResponseCode.OK, data={
                                         'acknowledged': True,
                                         'inserted_ids': [
-                                            example_element_one.id,
-                                            example_element_two.id
+                                            example_element_one._id,
+                                            example_element_two._id
                                         ]
                                     })
 
@@ -99,7 +99,7 @@ class TestMongoCRUDService(unittest.TestCase):
     @unittest.skip('Development test')
     def test_find(self):
         example_element = EQObject()
-        query = {'_id': example_element.id}
+        query = {'_id': example_element._id}
 
         expected_result = ResponseDTO(code=ResponseCode.OK, data=[example_element])
 
@@ -114,7 +114,7 @@ class TestMongoCRUDService(unittest.TestCase):
     @unittest.skip('Development test')
     def test_find_one(self):
         example_element = EQObject()
-        query = {'_id': example_element.id}
+        query = {'_id': example_element._id}
 
         expected_result = ResponseDTO(code=ResponseCode.OK, data=example_element)
 

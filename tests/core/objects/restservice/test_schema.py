@@ -11,7 +11,7 @@ class TestRestServiceSchema(unittest.TestCase):
 
     def test_validate_ok(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'host': 'host',
@@ -25,7 +25,7 @@ class TestRestServiceSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_host(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'host': '',
@@ -39,7 +39,7 @@ class TestRestServiceSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_port(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'host': 'host',
@@ -54,7 +54,7 @@ class TestRestServiceSchema(unittest.TestCase):
 
     def test_validate_ko_invalid_context_path(self):
         data = {
-            'id': '9c482525eaa14c3d808de7d1d1a483ed',
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'host': 'host',

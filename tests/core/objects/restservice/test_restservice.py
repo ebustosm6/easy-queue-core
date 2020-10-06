@@ -28,7 +28,7 @@ class TestRestService(unittest.TestCase):
         time_after_creation = datetime.utcnow().timestamp()
 
         self.assertEqual(res.identificator, expected_identificator)
-        self.assertEqual(res.id, expected_id)
+        self.assertEqual(res._id, expected_id)
         self.assertTrue(time_before_creation <= res.created_at <= time_after_creation)
         self.assertEqual(res.host, expected_host)
         self.assertEqual(res.port, expected_port)
@@ -51,7 +51,7 @@ class TestRestService(unittest.TestCase):
         expected_res = {
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
-            'id': '541028a93b1c3607b67cdf7394af4e67',
+            '_id': '541028a93b1c3607b67cdf7394af4e67',
             'host': 'host',
             'port': 15000,
             'context_path': '/context'
@@ -61,7 +61,7 @@ class TestRestService(unittest.TestCase):
 
         self.assertAlmostEqual(res['created_at'], expected_res['created_at'])
         self.assertEqual(res['identificator'], expected_res['identificator'])
-        self.assertEqual(res['id'], expected_res['id'])
+        self.assertEqual(res['_id'], expected_res['_id'])
         self.assertEqual(res['host'], expected_res['host'])
         self.assertEqual(res['port'], expected_res['port'])
         self.assertEqual(res['context_path'], expected_res['context_path'])
@@ -70,7 +70,7 @@ class TestRestService(unittest.TestCase):
         data = {
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
-            'id': ' 541028a93b1c3607b67cdf7394af4e67',
+            '_id': ' 541028a93b1c3607b67cdf7394af4e67',
             'host': 'host',
             'port': 15000,
             'context_path': '/context'
@@ -83,7 +83,7 @@ class TestRestService(unittest.TestCase):
         data = {
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
-            'id': '5eff1410425d349daf4a744a881f79fa',
+            '_id': '5eff1410425d349daf4a744a881f79fa',
             'host': 'host'
         }
         expected_msg = '{\'context_path\': [\'Missing data for required field.\']}'
@@ -97,7 +97,7 @@ class TestRestService(unittest.TestCase):
         self.assertIsNone(res.validate())
 
     def test_validate_ko(self):
-        expected_msg = '{\'id\': [\'Invalid generated id\']}'
+        expected_msg = '{\'_id\': [\'Invalid generated id\']}'
 
         res = RestService(identificator='identificator', host='host')
         res.identificator = 'other'

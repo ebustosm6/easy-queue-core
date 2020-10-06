@@ -32,7 +32,7 @@ class TestUser(unittest.TestCase):
         time_after_creation = datetime.utcnow().timestamp()
 
         self.assertEqual(res.identificator, expected_identificator)
-        self.assertEqual(res.id, expected_id)
+        self.assertEqual(res._id, expected_id)
         self.assertTrue(time_before_creation <= res.created_at <= time_after_creation)
         self.assertEqual(res.email, expected_email)
         self.assertEqual(res.region, expected_region)
@@ -56,7 +56,7 @@ class TestUser(unittest.TestCase):
         is_active = True
         image = 'image'
         expected_res = {
-            'id': '080148b36ee238bab9e84bde3ea94f11',
+            '_id': '080148b36ee238bab9e84bde3ea94f11',
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
             'email': 'email@server.dom',
@@ -72,14 +72,14 @@ class TestUser(unittest.TestCase):
 
         self.assertAlmostEqual(res['created_at'], expected_res['created_at'])
         self.assertEqual(res['identificator'], expected_res['identificator'])
-        self.assertEqual(res['id'], expected_res['id'])
+        self.assertEqual(res['_id'], expected_res['_id'])
         self.assertEqual(res['email'], expected_res['email'])
         self.assertEqual(res['password'], expected_res['password'])
         self.assertEqual(res['region'], expected_res['region'])
 
     def test_from_json_ok(self):
         data = {
-            'id': '080148b36ee238bab9e84bde3ea94f11',
+            '_id': '080148b36ee238bab9e84bde3ea94f11',
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
             'email': 'email@server.dom',
@@ -94,7 +94,7 @@ class TestUser(unittest.TestCase):
 
     def test_from_json_ko(self):
         data = {
-            'id': '080148b36ee238bab9e84bde3ea94f11',
+            '_id': '080148b36ee238bab9e84bde3ea94f11',
             'identificator': 'identificator',
             'created_at': datetime.utcnow().timestamp(),
             'email': 'email@server.dom',
@@ -114,7 +114,7 @@ class TestUser(unittest.TestCase):
         self.assertIsNone(res.validate())
 
     def test_validate_ko(self):
-        expected_msg = '{\'id\': [\'Invalid generated id\']}'
+        expected_msg = '{\'_id\': [\'Invalid generated id\']}'
 
         res = User(identificator='identificator', email='email@server.dom', region='region',
                    password='password', is_active=True, image='image')

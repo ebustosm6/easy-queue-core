@@ -4,9 +4,15 @@ from easyqueue.core.objects.base.eqobject import EQObject
 
 class User(EQObject):
 
+    EMAIL = 'email'
+    PASSWORD = 'password'
+    REGION = 'region'
+    IS_ACTIVE = 'is_active'
+    IMAGE = 'image'
+
     _schema = UserSchema()
-    _args = {'identificator', 'email', 'password', 'region'}
-    _hash_args = {'identificator'}
+    _args = {EQObject.IDENTIFICATOR, EMAIL, PASSWORD, REGION}
+    _hash_args = {EQObject.IDENTIFICATOR}
 
     def __init__(self, identificator, email, password, region, is_active=True, image=None):
         self.email = email

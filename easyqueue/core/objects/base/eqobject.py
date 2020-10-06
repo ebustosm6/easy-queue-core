@@ -7,14 +7,18 @@ from easyqueue.core.objects.base.schema import EQObjectSchema
 
 class EQObject:
 
+    IDENTIFICATOR = 'identificator'
+    CREATED_AT = 'created_at'
+    _ID = '_id'
+
     _schema = EQObjectSchema()
-    _args = {'identificator'}
-    _hash_args = {'identificator'}
+    _args = {IDENTIFICATOR}
+    _hash_args = {IDENTIFICATOR}
 
     def __init__(self, identificator):
         self.identificator = identificator
         self.created_at = datetime.utcnow().timestamp()
-        self.id = self._generate_id()
+        self._id = self._generate_id()
         self.validate()
 
     def __str__(self):
@@ -26,15 +30,15 @@ class EQObject:
     def __eq__(self, other):
         return all(
             isinstance(other, self.__class__),
-            self.id == other.id
+            self._id == other.id
         )
 
     def validate(self):
         validation_errors = self._schema.validate(self.json())
         if validation_errors:
             raise ValueError(str(validation_errors))
-        if self.id != self._generate_id():
-            raise ValueError(str({'id': ['Invalid generated id']}))
+        if self._id != self._generate_id():
+            raise ValueError(str({'_id': ['Invalid generated id']}))
 
     def _generate_id(self):
         hash_args = {self.__getattribute__(arg_name) for arg_name in self._hash_args}
@@ -51,6 +55,14 @@ class EQObject:
     @classmethod
     def get_schema(cls):
         return cls._schema
+
+    @classmethod
+    def get_args(cls):
+        return cls._args
+
+    @classmethod
+    def get_args_all(cls):
+        return cls._args_all
 
     @classmethod
     def from_json(cls, obj, as_string=False):
