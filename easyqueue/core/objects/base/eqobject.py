@@ -49,6 +49,10 @@ class EQObject:
         return obj_json
     
     @classmethod
+    def get_schema(cls):
+        return cls._schema
+
+    @classmethod
     def from_json(cls, obj, as_string=False):
         return_object = None
         input_init_args = {}
