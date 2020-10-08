@@ -16,19 +16,19 @@ class BaseCRUDService(ABC):
     async def create_many(self, elements: List[EQObject]) -> ResponseDTO:
         raise NotImplementedError()
 
-    async def find(self, query: object) -> ResponseDTO:
+    async def find_one(self, identificator: str) -> ResponseDTO:
         raise NotImplementedError()
 
-    async def find_one(self, query: object) -> ResponseDTO:
+    async def find_many(self, query: object) -> ResponseDTO:
         raise NotImplementedError()
 
-    async def update_one(self, query: object, update: object) -> ResponseDTO:
+    async def update_one(self, identificator: str, update: EQObject) -> ResponseDTO:
         raise NotImplementedError()
 
     async def update_many(self, query: object, update: object) -> ResponseDTO:
         raise NotImplementedError()
 
-    async def delete_one(self, query: object) -> ResponseDTO:
+    async def delete_one(self, identificator: str) -> ResponseDTO:
         raise NotImplementedError()
 
     async def delete_many(self, query: object) -> ResponseDTO:

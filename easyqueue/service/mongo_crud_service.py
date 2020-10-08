@@ -43,7 +43,14 @@ class MongoCRUDService(BaseCRUDService):
             validated_elements.append(self.__get_validated_element(element))
         return await self.repository.create_many(elements=validated_elements)
 
-    async def find(self, query: Dict, skip: int = 0, limit: int = 0) -> ResponseDTO:
+    async def find_one(self, identificator: str) -> ResponseDTO:
+        query = {'identificator': identificator}
+        response_result = await self.repository.find_one(query=query)
+        data_result = self.base_object_class.from_json(response_result.data)
+        response_result_parsed = ResponseDTO(code=response_result.code, data=data_result)
+        return response_result_parsed
+
+    async def find_many(self, query: Dict, skip: int = 0, limit: int = 0) -> ResponseDTO:
         TypeValidator.raise_validation_element_type(
             element_name='query', element=query, type_class=dict, allow_none=False)
         response_result = await self.repository.find(query=query, skip=skip, limit=limit)
@@ -54,19 +61,10 @@ class MongoCRUDService(BaseCRUDService):
         response_result_parsed = ResponseDTO(code=response_result.code, data=parsed_results)
         return response_result_parsed
 
-    async def find_one(self, query: Dict) -> ResponseDTO:
-        TypeValidator.raise_validation_element_type(
-            element_name='query', element=query, type_class=dict, allow_none=False)
-        response_result = await self.repository.find_one(query=query)
-        data_result = self.base_object_class.from_json(response_result.data)
-        response_result_parsed = ResponseDTO(code=response_result.code, data=data_result)
-        return response_result_parsed
-
-    async def update_one(self, query: Dict, update: Dict) -> ResponseDTO:
-        TypeValidator.raise_validation_element_type(
-            element_name='query', element=query, type_class=dict, allow_none=False)
+    async def update_one(self, identificator: str, update: Dict) -> ResponseDTO:
         TypeValidator.raise_validation_element_type(
             element_name='update', element=update, type_class=dict, allow_none=False)
+        query = {'identificator': identificator}
         return await self.repository.update_one(query=query, update=update)
 
     async def update_many(self, query: Dict, update: Dict) -> ResponseDTO:
@@ -76,9 +74,8 @@ class MongoCRUDService(BaseCRUDService):
             element_name='update', element=update, type_class=dict, allow_none=False)
         return await self.repository.update_many(query=query, update=update)
 
-    async def delete_one(self, query: Dict) -> ResponseDTO:
-        TypeValidator.raise_validation_element_type(
-            element_name='query', element=query, type_class=dict, allow_none=False)
+    async def delete_one(self, identificator: str) -> ResponseDTO:
+        query = {'identificator': identificator}
         return await self.repository.delete_one(query=query)
 
     async def delete_many(self, query: Dict) -> ResponseDTO:

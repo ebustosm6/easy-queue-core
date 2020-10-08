@@ -70,7 +70,15 @@ class MongoCRUDShardedService(BaseCRUDShardedService):
             validated_elements.append(self.__get_validated_element(element))
         return await self.repository.create_many(elements=validated_elements)
 
-    async def find(self, region: str, h3: str, query: Dict = None, skip: int = 0, limit: int = 0) -> ResponseDTO:
+    async def find_one(self, identificator: str, region: str, h3: str) -> ResponseDTO:
+        self.__validate_sharded(identificator=identificator, region=region, h3=h3)
+        query = self.__handle_query(identificator=identificator, region=region, h3=h3, query=None)
+        response_result = await self.repository.find_one(query=query)
+        data_result = self.base_object_class.from_json(response_result.data)
+        response_result_parsed = ResponseDTO(code=response_result.code, data=data_result)
+        return response_result_parsed
+
+    async def find_many(self, region: str, h3: str, query: Dict = None, skip: int = 0, limit: int = 0) -> ResponseDTO:
         self.__validate_sharded(region=region, h3=h3)
         query = self.__handle_query(region=region, h3=h3, query=query)
         response_result = await self.repository.find(query=query, skip=skip, limit=limit)
@@ -79,14 +87,6 @@ class MongoCRUDShardedService(BaseCRUDShardedService):
         for raw_result in raw_results:
             parsed_results.append(self.base_object_class.from_json(raw_result))
         response_result_parsed = ResponseDTO(code=response_result.code, data=parsed_results)
-        return response_result_parsed
-
-    async def find_one(self, identificator: str, region: str, h3: str) -> ResponseDTO:
-        self.__validate_sharded(identificator=identificator, region=region, h3=h3)
-        query = self.__handle_query(identificator=identificator, region=region, h3=h3, query=None)
-        response_result = await self.repository.find_one(query=query)
-        data_result = self.base_object_class.from_json(response_result.data)
-        response_result_parsed = ResponseDTO(code=response_result.code, data=data_result)
         return response_result_parsed
 
     async def update_one(self, identificator: str, region: str, h3: str, update: EqShardedObject) -> ResponseDTO:

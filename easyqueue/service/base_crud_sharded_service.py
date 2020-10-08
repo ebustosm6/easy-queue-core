@@ -17,13 +17,13 @@ class BaseCRUDShardedService(ABC):
     async def create_many(self, region: str, h3: str, elements: List[EqShardedObject]) -> ResponseDTO:
         raise NotImplementedError()
 
-    async def find(self, region: str, h3: str, query: object = None) -> ResponseDTO:
-        raise NotImplementedError()
-
     async def find_one(self, identificator: str, region: str, h3: str) -> ResponseDTO:
         raise NotImplementedError()
 
-    async def update_one(self, identificator: str, region: str, h3: str, update: object) -> ResponseDTO:
+    async def find_many(self, region: str, h3: str, query: object = None) -> ResponseDTO:
+        raise NotImplementedError()
+
+    async def update_one(self, identificator: str, region: str, h3: str, update: EqShardedObject) -> ResponseDTO:
         raise NotImplementedError()
 
     async def update_many(self, region: str, h3: str, update: object, query: object = None) -> ResponseDTO:
