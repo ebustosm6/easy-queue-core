@@ -14,6 +14,7 @@ class TestUser(unittest.TestCase):
         identificator = 'identificator'
         email = 'email@server.dom'
         region = 'region'
+        h3 = 'FFFFFFF'
         password = 'password'
         is_active = True
         image = 'image'
@@ -26,9 +27,8 @@ class TestUser(unittest.TestCase):
         expected_image = 'image'
 
         time_before_creation = datetime.utcnow().timestamp()
-        res = User(
-            identificator=identificator, email=email, region=region, password=password, is_active=is_active, image=image
-        )
+        res = User(identificator=identificator, email=email, region=region, h3=h3,
+                   password=password, is_active=is_active, image=image)
         time_after_creation = datetime.utcnow().timestamp()
 
         self.assertEqual(res.identificator, expected_identificator)
@@ -45,17 +45,19 @@ class TestUser(unittest.TestCase):
             'email': ['Invalid empty field'],
             'identificator': ['Invalid empty field'],
             'password': ['Invalid empty field'],
-            'region': ['Invalid empty field']
+            'region': ['Invalid empty field'],
+            'h3': ['Invalid empty field']
         }
 
         with self.assertRaises(Exception) as exp:
-            User(identificator='', email='', region='', password='')
+            User(identificator='', email='', region='', password='', h3='')
         self.assertEqual(exp.exception.args[0], expected_msg)
 
     def test_json_ok(self):
         identificator = 'identificator'
         email = 'email@server.dom'
         region = 'region'
+        h3 = 'FFFFFFF'
         password = 'password'
         is_active = True
         image = 'image'
@@ -66,13 +68,13 @@ class TestUser(unittest.TestCase):
             'email': 'email@server.dom',
             'password': 'password',
             'region': 'region',
+            'h3': 'FFFFFFF',
             'is_active': True,
             'image': 'image'
         }
 
-        res = User(
-            identificator=identificator, email=email, region=region, password=password, is_active=is_active, image=image
-        ).json()
+        res = User(identificator=identificator, email=email, region=region, h3=h3,
+                   password=password, is_active=is_active, image=image).json()
 
         self.assertAlmostEqual(res['created_at'], expected_res['created_at'])
         self.assertEqual(res['identificator'], expected_res['identificator'])
@@ -80,6 +82,7 @@ class TestUser(unittest.TestCase):
         self.assertEqual(res['email'], expected_res['email'])
         self.assertEqual(res['password'], expected_res['password'])
         self.assertEqual(res['region'], expected_res['region'])
+        self.assertEqual(res['h3'], expected_res['h3'])
 
     def test_from_json_ok(self):
         data = {
@@ -89,6 +92,7 @@ class TestUser(unittest.TestCase):
             'email': 'email@server.dom',
             'password': 'password',
             'region': 'region',
+            'h3': 'FFFFFFF',
             'is_active': True,
             'image': 'image'
         }
@@ -103,6 +107,7 @@ class TestUser(unittest.TestCase):
             'created_at': datetime.utcnow().timestamp(),
             'email': 'email@server.dom',
             'region': 'region',
+            'h3': 'FFFFFFF',
             'is_active': True,
             'image': 'image'
         }
@@ -112,10 +117,10 @@ class TestUser(unittest.TestCase):
 
         with self.assertRaises(ValueError) as exp:
             User.from_json(obj=data)
-        self.assertEqual(exp.exception.args[0], expected_msg)
+        self.assertDictEqual(exp.exception.args[0], expected_msg)
 
     def test_validate_ok(self):
-        res = User(identificator='identificator', email='email@server.dom', region='region',
+        res = User(identificator='identificator', email='email@server.dom', region='region', h3='FFFFFFF',
                    password='password', is_active=True, image='image')
         self.assertIsNone(res.validate())
 
@@ -124,7 +129,7 @@ class TestUser(unittest.TestCase):
             '_id': ['Invalid generated id']
         }
 
-        res = User(identificator='identificator', email='email@server.dom', region='region',
+        res = User(identificator='identificator', email='email@server.dom', region='region', h3='FFFFFFF',
                    password='password', is_active=True, image='image')
         res.identificator = 'other'
         with self.assertRaises(ValueError) as exp:

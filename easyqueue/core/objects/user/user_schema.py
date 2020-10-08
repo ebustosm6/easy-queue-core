@@ -1,17 +1,17 @@
 import re
 
-from easyqueue.core.objects.base.eqobject_schema import EQObjectSchema
+from easyqueue.core.objects.base.eqshardedobject_schema import EqShardedObjectSchema
+
 from marshmallow import fields, validates, ValidationError
 
 
-class UserSchema(EQObjectSchema):
+class UserSchema(EqShardedObjectSchema):
 
     MIN_LIMIT = 0
     EMAIL_PATTERN = '[^@]+@[^@]+\.[^@]+'
 
     email = fields.Str(required=True)
     password = fields.Str(required=True)
-    region = fields.Str(required=True)
     is_active = fields.Bool(required=True)
     image = fields.Str(required=True, allow_none=True)
 
@@ -23,8 +23,4 @@ class UserSchema(EQObjectSchema):
 
     @validates('password')
     def validate_password(self, data: str):
-        self.validate_non_empty(data=data)
-
-    @validates('region')
-    def validate_region(self, data: str):
         self.validate_non_empty(data=data)
