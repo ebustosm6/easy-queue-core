@@ -16,7 +16,7 @@ class TypeValidator:
     def raise_validation_element_empty(element_name: str, element: object, allow_none: bool = False):
         if isinstance(element, Iterable):
             if not element and not (element is None and allow_none):
-                raise TypeError(
+                raise ValueError(
                     'Invalid element {elem_name} with no valid value {elem_val}'.format(
                         elem_name=element_name, elem_val=element))
 

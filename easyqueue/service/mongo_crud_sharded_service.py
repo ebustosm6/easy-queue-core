@@ -89,12 +89,13 @@ class MongoCRUDShardedService(BaseCRUDShardedService):
         response_result_parsed = ResponseDTO(code=response_result.code, data=data_result)
         return response_result_parsed
 
-    async def update_one(self, identificator: str, region: str, h3: str, update: Dict) -> ResponseDTO:
+    async def update_one(self, identificator: str, region: str, h3: str, update: EqShardedObject) -> ResponseDTO:
         self.__validate_sharded(identificator=identificator, region=region, h3=h3)
         TypeValidator.raise_validation_element_type(
             element_name='update', element=update, type_class=dict, allow_none=False)
         query = self.__handle_query(identificator=identificator, region=region, h3=h3, query=None)
-        return await self.repository.update_one(query=query, update=update)
+        update_json = update.json(as_string=False)
+        return await self.repository.update_one(query=query, update=update_json)
 
     async def update_many(self, region: str, h3: str, update: Dict, query: Dict = None) -> ResponseDTO:
         self.__validate_sharded(region=region, h3=h3)
