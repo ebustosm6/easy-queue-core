@@ -1,10 +1,11 @@
+from abc import ABC
 from typing import List
 
 from easyqueue.core.response import ResponseDTO
 from easyqueue.core.objects.base.eqobject import EQObject
 
 
-class BaseCRUDService:
+class BaseCRUDService(ABC):
 
     async def count(self, query: dict) -> ResponseDTO:
         raise NotImplementedError()

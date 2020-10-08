@@ -19,3 +19,10 @@ class TypeValidator:
                 raise TypeError(
                     'Invalid element {elem_name} with no valid value {elem_val}'.format(
                         elem_name=element_name, elem_val=element))
+
+    @staticmethod
+    def raise_validation_element_empty_and_type(element_name: str, element: object, type_class: Type,
+                                               allow_none: bool = False):
+        TypeValidator.raise_validation_element_type(element_name=element_name, element=element, type_class=type_class,
+                                                    allow_none=allow_none)
+        TypeValidator.raise_validation_element_empty(element_name=element_name, element=element, allow_none=allow_none)
