@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from easyqueue.core.objects.ticket.schema import TicketSchema
+from easyqueue.core.objects.ticket.ticket_schema import TicketSchema
 
 
 class TestTicketSchema(unittest.TestCase):
@@ -15,6 +15,7 @@ class TestTicketSchema(unittest.TestCase):
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'user_identificator': 'user_identificator',
             'queue_id': 'queue_id',
@@ -27,30 +28,13 @@ class TestTicketSchema(unittest.TestCase):
         res = validator.validate(data=data)
         self.assertEqual(res, expected_res)
 
-    def test_validate_ko_invalid_region(self):
-        data = {
-            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
-            'identificator': 'identificator',
-            'created_at': 1590000000.000000,
-            'region': '',
-            'user_id': 'user_id',
-            'user_identificator': 'user_identificator',
-            'queue_id': 'queue_id',
-            'queue_identificator': 'queue_identificator',
-            'is_active': True,
-        }
-        expected_res = {'region': ['Invalid empty field']}
-
-        validator = TicketSchema()
-        res = validator.validate(data=data)
-        self.assertEqual(res, expected_res)
-
     def test_validate_ko_invalid_user_id(self):
         data = {
             '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': '',
             'user_identificator': 'user_identificator',
             'queue_id': 'queue_id',
@@ -69,6 +53,7 @@ class TestTicketSchema(unittest.TestCase):
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'user_identificator': '',
             'queue_id': 'queue_id',
@@ -87,6 +72,7 @@ class TestTicketSchema(unittest.TestCase):
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'user_identificator': 'user_identificator',
             'queue_id': '',
@@ -99,12 +85,13 @@ class TestTicketSchema(unittest.TestCase):
         res = validator.validate(data=data)
         self.assertEqual(res, expected_res)
 
-    def test_validate_ko_invalid_user_identificator(self):
+    def test_validate_ko_invalid_queue_identificator(self):
         data = {
             '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'user_identificator': 'user_identificator',
             'queue_id': 'queue_id',

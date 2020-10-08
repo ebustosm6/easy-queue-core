@@ -1,6 +1,6 @@
 import string
 
-from easyqueue.core.objects.base.schema import EQObjectSchema
+from easyqueue.core.objects.base.eqobject_schema import EQObjectSchema
 from marshmallow import fields, ValidationError, validates
 
 

@@ -57,7 +57,7 @@ class MongoCRUDService(BaseCRUDService):
     async def find_one(self, query: Dict) -> ResponseDTO:
         TypeValidator.raise_validation_element_type(
             element_name='query', element=query, type_class=dict, allow_none=False)
-        response_result  = await self.repository.find_one(query=query)
+        response_result = await self.repository.find_one(query=query)
         data_result = self.base_object_class.from_json(response_result.data)
         response_result_parsed = ResponseDTO(code=response_result.code, data=data_result)
         return response_result_parsed

@@ -1,12 +1,12 @@
-from easyqueue.core.objects.base.schema import EQObjectSchema
+from easyqueue.core.objects.base.eqshardedobject_schema import EqShardedObjectSchema
+
 from marshmallow import fields, ValidationError, validates
 
 
-class QueueSchema(EQObjectSchema):
+class QueueSchema(EqShardedObjectSchema):
 
     MIN_LIMIT = 0
 
-    region = fields.Str(required=True)
     user_id = fields.Str(required=True)
     group = fields.Str(required=True)
     info = fields.Str(required=True)
@@ -17,10 +17,6 @@ class QueueSchema(EQObjectSchema):
 
     @validates('user_id')
     def validate_user_id(self, data: str):
-        self.validate_non_empty(data=data)
-
-    @validates('region')
-    def validate_region(self, data: str):
         self.validate_non_empty(data=data)
 
     @validates('group')

@@ -1,4 +1,4 @@
-from easyqueue.core.objects.rest.schema import RestServiceSchema
+from easyqueue.core.objects.rest.restservice_schema import RestServiceSchema
 from easyqueue.core.objects.base.eqobject import EQObject
 
 
@@ -6,7 +6,6 @@ class RestService(EQObject):
 
     HOST = 'host'
     CONTEXT_PATH = 'context_path'
-    PORT = 'port'
 
     _schema = RestServiceSchema()
     _args = {EQObject.IDENTIFICATOR, HOST}

@@ -24,11 +24,13 @@ class TestEQObject(unittest.TestCase):
         self.assertTrue(time_before_creation <= res.created_at <= time_after_creation)
 
     def test_init_ko(self):
-        expected_msg = '{\'identificator\': [\'Invalid empty field\']}'
+        expected_msg = {
+            'identificator': ['Invalid empty field']
+        }
 
         with self.assertRaises(Exception) as exp:
             EQObject(identificator='')
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertEqual(exp.exception.args[0], expected_msg)
 
     def test_json_ok(self):
         identificator = 'identificator'
@@ -59,24 +61,28 @@ class TestEQObject(unittest.TestCase):
             'created_at': datetime.utcnow().timestamp(),
             '_id': '5eff1410425d349daf4a744a881f79fa',
         }
-        expected_msg = '{\'identificator\': [\'Missing data for required field.\']}'
+        expected_msg = {
+            'identificator': ['Missing data for required field.']
+        }
 
         with self.assertRaises(ValueError) as exp:
             EQObject.from_json(obj=data)
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertDictEqual(exp.exception.args[0], expected_msg)
 
     def test_validate_ok(self):
         res = EQObject(identificator='identificator')
         self.assertIsNone(res.validate())
 
     def test_validate_ko(self):
-        expected_msg = '{\'_id\': [\'Invalid generated id\']}'
+        expected_msg = {
+            '_id': ['Invalid generated id']
+        }
 
         res = EQObject(identificator='identificator')
         res.identificator = 'other'
         with self.assertRaises(ValueError) as exp:
             res.validate()
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertDictEqual(exp.exception.args[0], expected_msg)
 
 
 if __name__ == '__main__':

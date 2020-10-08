@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from easyqueue.core.objects.rest.schema import RestServiceSchema
+from easyqueue.core.objects.rest.restservice_schema import RestServiceSchema
 
 
 class TestRestServiceSchema(unittest.TestCase):

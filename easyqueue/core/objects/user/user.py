@@ -1,4 +1,4 @@
-from easyqueue.core.objects.user.schema import UserSchema
+from easyqueue.core.objects.user.user_schema import UserSchema
 from easyqueue.core.objects.base.eqobject import EQObject
 
 
@@ -7,8 +7,6 @@ class User(EQObject):
     EMAIL = 'email'
     PASSWORD = 'password'
     REGION = 'region'
-    IS_ACTIVE = 'is_active'
-    IMAGE = 'image'
 
     _schema = UserSchema()
     _args = {EQObject.IDENTIFICATOR, EMAIL, PASSWORD, REGION}

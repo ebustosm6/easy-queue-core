@@ -27,6 +27,7 @@ setup(
     install_requires=[
         'schema',
         'marshmallow',
-        'requests'
+        'requests',
+        'h3'
         ],
 )

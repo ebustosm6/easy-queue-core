@@ -41,12 +41,16 @@ class TestUser(unittest.TestCase):
         self.assertEqual(res.image, expected_image)
 
     def test_init_ko(self):
-        expected_msg = '{\'email\': [\'Invalid empty field\'], \'identificator\': [\'Invalid empty field\'], ' \
-                       '\'password\': [\'Invalid empty field\'], \'region\': [\'Invalid empty field\']}'
+        expected_msg = {
+            'email': ['Invalid empty field'],
+            'identificator': ['Invalid empty field'],
+            'password': ['Invalid empty field'],
+            'region': ['Invalid empty field']
+        }
 
         with self.assertRaises(Exception) as exp:
             User(identificator='', email='', region='', password='')
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertEqual(exp.exception.args[0], expected_msg)
 
     def test_json_ok(self):
         identificator = 'identificator'
@@ -102,11 +106,13 @@ class TestUser(unittest.TestCase):
             'is_active': True,
             'image': 'image'
         }
-        expected_msg = '{\'password\': [\'Missing data for required field.\']}'
+        expected_msg = {
+            'password': ['Missing data for required field.']
+        }
 
         with self.assertRaises(ValueError) as exp:
             User.from_json(obj=data)
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertEqual(exp.exception.args[0], expected_msg)
 
     def test_validate_ok(self):
         res = User(identificator='identificator', email='email@server.dom', region='region',
@@ -114,14 +120,16 @@ class TestUser(unittest.TestCase):
         self.assertIsNone(res.validate())
 
     def test_validate_ko(self):
-        expected_msg = '{\'_id\': [\'Invalid generated id\']}'
+        expected_msg = {
+            '_id': ['Invalid generated id']
+        }
 
         res = User(identificator='identificator', email='email@server.dom', region='region',
                    password='password', is_active=True, image='image')
         res.identificator = 'other'
         with self.assertRaises(ValueError) as exp:
             res.validate()
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertEqual(exp.exception.args[0], expected_msg)
 
 
 if __name__ == '__main__':

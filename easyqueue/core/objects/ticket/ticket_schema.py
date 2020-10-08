@@ -1,12 +1,12 @@
-from easyqueue.core.objects.base.schema import EQObjectSchema
+from easyqueue.core.objects.base.eqshardedobject_schema import EqShardedObjectSchema
+
 from marshmallow import fields, validates
 
 
-class TicketSchema(EQObjectSchema):
+class TicketSchema(EqShardedObjectSchema):
 
     user_id = fields.Str(required=True)
     user_identificator = fields.Str(required=True)
-    region = fields.Str(required=True)
     queue_id = fields.Str(required=True)
     queue_identificator = fields.Str(required=True)
     is_active = fields.Bool(required=True)

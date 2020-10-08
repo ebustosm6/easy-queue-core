@@ -37,11 +37,14 @@ class TestRestService(unittest.TestCase):
         self.assertEqual(res.uri, expected_uri)
 
     def test_init_ko(self):
-        expected_msg = '{\'host\': [\'Invalid empty field\'], \'identificator\': [\'Invalid empty field\']}'
+        expected_msg = {
+            'host': ['Invalid empty field'],
+            'identificator': ['Invalid empty field']
+        }
 
         with self.assertRaises(Exception) as exp:
             RestService(identificator='', host='')
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertEqual(exp.exception.args[0], expected_msg)
 
     def test_json_ok(self):
         identificator = 'identificator'
@@ -86,24 +89,28 @@ class TestRestService(unittest.TestCase):
             '_id': '5eff1410425d349daf4a744a881f79fa',
             'host': 'host'
         }
-        expected_msg = '{\'context_path\': [\'Missing data for required field.\']}'
+        expected_msg = {
+            'context_path': ['Missing data for required field.']
+        }
 
         with self.assertRaises(ValueError) as exp:
             RestService.from_json(obj=data)
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertEqual(exp.exception.args[0], expected_msg)
 
     def test_validate_ok(self):
         res = RestService(identificator='identificator', host='host')
         self.assertIsNone(res.validate())
 
     def test_validate_ko(self):
-        expected_msg = '{\'_id\': [\'Invalid generated id\']}'
+        expected_msg = {
+            '_id': ['Invalid generated id']
+        }
 
         res = RestService(identificator='identificator', host='host')
         res.identificator = 'other'
         with self.assertRaises(ValueError) as exp:
             res.validate()
-        self.assertEqual(str(exp.exception), expected_msg)
+        self.assertEqual(exp.exception.args[0], expected_msg)
 
 
 if __name__ == '__main__':

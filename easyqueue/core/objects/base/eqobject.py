@@ -2,14 +2,12 @@ import uuid
 import json
 from datetime import datetime
 
-from easyqueue.core.objects.base.schema import EQObjectSchema
+from easyqueue.core.objects.base.eqobject_schema import EQObjectSchema
 
 
 class EQObject:
 
     IDENTIFICATOR = 'identificator'
-    CREATED_AT = 'created_at'
-    _ID = '_id'
 
     _schema = EQObjectSchema()
     _args = {IDENTIFICATOR}
@@ -36,9 +34,9 @@ class EQObject:
     def validate(self):
         validation_errors = self._schema.validate(self.json())
         if validation_errors:
-            raise ValueError(str(validation_errors))
+            raise ValueError(validation_errors)
         if self._id != self._generate_id():
-            raise ValueError(str({'_id': ['Invalid generated id']}))
+            raise ValueError({'_id': ['Invalid generated id']})
 
     def _generate_id(self):
         hash_args = {self.__getattribute__(arg_name) for arg_name in self._hash_args}

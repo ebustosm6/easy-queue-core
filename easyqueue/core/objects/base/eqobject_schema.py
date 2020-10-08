@@ -8,7 +8,7 @@ class EQObjectSchema(Schema):
     MIN_TIMESTAMP = 1580000000.000000
     MAX_TIMESTAMP = 4101600000.000000
     PUNCTUATION_CHARACTERS = {'_', '-'}
-    VALID_CHARACTERS = set(string.ascii_lowercase).union(string.digits).union(PUNCTUATION_CHARACTERS)
+    VALID_CHARACTERS = set(string.ascii_letters).union(string.digits).union(PUNCTUATION_CHARACTERS)
 
     _id = fields.Str(required=False)
     identificator = fields.Str(required=True)

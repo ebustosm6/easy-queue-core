@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from easyqueue.core.objects.base.schema import EQObjectSchema
+from easyqueue.core.objects.base.eqobject_schema import EQObjectSchema
 
 
 class TestEQObjectSchema(unittest.TestCase):

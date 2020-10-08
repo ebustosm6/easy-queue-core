@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from easyqueue.core.objects.queue.schema import QueueSchema
+from easyqueue.core.objects.queue.queue_schema import QueueSchema
 
 
 class TestQueueSchema(unittest.TestCase):
@@ -15,6 +15,7 @@ class TestQueueSchema(unittest.TestCase):
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'group': 'group',
             'info': '',
@@ -35,6 +36,7 @@ class TestQueueSchema(unittest.TestCase):
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': '',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'group': 'group',
             'info': 'info',
@@ -49,12 +51,34 @@ class TestQueueSchema(unittest.TestCase):
         res = validator.validate(data=data)
         self.assertEqual(res, expected_res)
 
+    def test_validate_ko_invalid_h3(self):
+        data = {
+            '_id': '9c482525eaa14c3d808de7d1d1a483ed',
+            'identificator': 'identificator',
+            'created_at': 1590000000.000000,
+            'region': 'region',
+            'h3': '',
+            'user_id': 'user_id',
+            'group': 'group',
+            'info': 'info',
+            'tags': set(),
+            'limit': 0,
+            'is_active': True,
+            'image': 'image'
+        }
+        expected_res = {'h3': ['Invalid empty field']}
+
+        validator = QueueSchema()
+        res = validator.validate(data=data)
+        self.assertEqual(res, expected_res)
+
     def test_validate_ko_invalid_user_id(self):
         data = {
             '_id': '9c482525eaa14c3d808de7d1d1a483ed',
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': '',
             'group': 'group',
             'info': 'info',
@@ -75,6 +99,7 @@ class TestQueueSchema(unittest.TestCase):
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'group': '',
             'info': 'info',
@@ -95,6 +120,7 @@ class TestQueueSchema(unittest.TestCase):
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'group': 'group',
             'info': 'info',
@@ -115,6 +141,7 @@ class TestQueueSchema(unittest.TestCase):
             'identificator': 'identificator',
             'created_at': 1590000000.000000,
             'region': 'region',
+            'h3': 'FFFFFFF',
             'user_id': 'user_id',
             'group': 'group',
             'info': 'info',

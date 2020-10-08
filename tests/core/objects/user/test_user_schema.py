@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from easyqueue.core.objects.user.schema import UserSchema
+from easyqueue.core.objects.user.user_schema import UserSchema
 
 
 class TestUserSchema(unittest.TestCase):
